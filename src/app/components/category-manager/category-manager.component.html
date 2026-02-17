@@ -1,0 +1,47 @@
+<div class="container">
+  @if (showToast()) {
+    <div class="toast success">
+      ✅ Category saved successfully!
+    </div>
+  }
+
+  <div class="card">
+    <h2>Manage Categories</h2>
+    <p class="subtitle">Create catalogs to organize your spending</p>
+    
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="category-form">
+      <div class="form-group">
+        <label>Category Name</label>
+        <input type="text" formControlName="name" placeholder="e.g. Entertainment">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" formControlName="description" placeholder="Optional details...">
+      </div>
+      <button type="submit" [disabled]="categoryForm.invalid" class="btn-submit">
+        Add Category
+      </button>
+    </form>
+  </div>
+
+  <div class="category-list-header">
+    <h3>Existing Categories</h3>
+    <span class="count-badge">{{ categoryService.categories().length }}</span>
+  </div>
+
+  <div class="category-list">
+    @for (cat of categoryService.categories(); track cat.id) {
+      <div class="category-item">
+        <div class="dot"></div>
+        <div class="info">
+          <strong>{{ cat.name }}</strong>
+          <p>{{ cat.description || 'No description provided' }}</p>
+        </div>
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <p>No categories found. Start by adding one above.</p>
+      </div>
+    }
+  </div>
+</div>

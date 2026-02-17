@@ -1,0 +1,28 @@
+<div class="table-container">
+  @if (isLoading()) {
+  <div class="spinner">Loading...</div>
+  } @else {
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of expenses(); track item.id) {
+      <tr>
+        <td>{{ item.description }}</td>
+        <td>
+          <span class="category-badge">{{ item.category.name }}</span>
+        </td>
+        <td>{{ item.amount | currency }}</td>
+      </tr>
+      } @empty {
+      <p>No transactions found.</p>
+      }
+    </tbody>
+  </table>
+  }
+</div>

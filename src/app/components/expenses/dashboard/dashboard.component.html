@@ -1,0 +1,25 @@
+<div class="dashboard-wrapper">
+  <header>
+    <h1>Fintech Dashboard</h1>
+    <button (click)="refreshGraphics()" class="btn-refresh">Update Graphics</button>
+  </header>
+
+  <div class="grid-layout">
+    <div class="card chart-card">
+      <h3>Spending by Category</h3>
+      @if (chartData().datasets[0].data.length > 0) {
+        <canvas baseChart 
+                [data]="chartData()" 
+                [options]="chartOptions" 
+                [type]="chartType">
+        </canvas>
+      } @else {
+        <p class="empty-msg">No data available for charts.</p>
+      }
+    </div>
+
+    <div class="card list-card">
+      <app-expense-list />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+.dashboard-wrapper {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr; // Chart on left, List on right
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-refresh {
+  background: var(--accent);
+  color: var(--bg-dark);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr; // Form on left, List/Chart on right
+  gap: 2rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
