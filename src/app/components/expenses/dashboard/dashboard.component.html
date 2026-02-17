@@ -1,25 +1,37 @@
 <div class="dashboard-wrapper">
-  <header>
-    <h1>Fintech Dashboard</h1>
-    <button (click)="refreshGraphics()" class="btn-refresh">Update Graphics</button>
-  </header>
+
+  <div class="card filter-card">
+    <div class="filter-grid">
+      <div class="form-group">
+        <label>From</label>
+        <input type="date" [value]="startDate()" (input)="startDate.set($any($event.target).value)">
+      </div>
+
+      <div class="form-group">
+        <label>To</label>
+        <input type="date" [value]="endDate()" (input)="endDate.set($any($event.target).value)">
+      </div>
+
+      @if (authService.isAdmin()) {
+      <div class="form-group">
+        <label>Filter by User (Admin Only)</label>
+        <input type="text" placeholder="Enter username..." (input)="targetUser.set($any($event.target).value)">
+      </div>
+      }
+
+      <button (click)="refreshGraphics()" class="btn-refresh">Apply Filters</button>
+    </div>
+  </div>
 
   <div class="grid-layout">
     <div class="card chart-card">
-      <h3>Spending by Category</h3>
+      <h3>Spending Analysis</h3>
       @if (chartData().datasets[0].data.length > 0) {
-        <canvas baseChart 
-                [data]="chartData()" 
-                [options]="chartOptions" 
-                [type]="chartType">
-        </canvas>
+      <canvas baseChart [data]="chartData()" [options]="chartOptions" [type]="chartType">
+      </canvas>
       } @else {
-        <p class="empty-msg">No data available for charts.</p>
+      <div class="empty-msg">No data for selected range.</div>
       }
-    </div>
-
-    <div class="card list-card">
-      <app-expense-list />
     </div>
   </div>
 </div>
