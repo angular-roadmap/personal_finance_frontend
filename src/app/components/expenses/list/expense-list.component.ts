@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ExpenseService } from '../../../services/expense.service';
 import { AuthService } from '../../../services/auth.service';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { ExpenseDTO } from '../../../models/api.models';
 
 @Component({
   selector: 'app-expense-list',
@@ -14,8 +15,7 @@ export class ExpenseListComponent implements OnInit {
   private expenseService = inject(ExpenseService);
   public authService = inject(AuthService);
   
-  
-  expenses = signal<any[]>([]);
+  expenses = signal<ExpenseDTO[]>([]);
   isLoading = signal(false);
   currentPage = signal(0);
   pageSize = 20;
@@ -29,10 +29,12 @@ export class ExpenseListComponent implements OnInit {
   loadData() {
     this.isLoading.set(true);
     this.expenseService.getExpenses(this.currentPage(), this.pageSize).subscribe({
-      next: (res) => {
-        this.expenses.set(res.content);
-        this.totalPages.set(res.totalPages);
-        this.totalElements.set(res.totalElements);
+      next: (response) => {
+        if (response.success && response.data) {
+          this.expenses.set(response.data.content);
+          this.totalPages.set(response.data.totalPages);
+          this.totalElements.set(response.data.totalElements);
+        }
       },
       error: (err) => {
         console.error('Failed to load expenses:', err);

@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { LoginRequest } from '../../models/api.models';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +37,15 @@ export class LoginComponent implements OnInit {
       this.isLoading.set(true);
       this.errorMessage.set(null);
 
-      this.authService.login(this.loginForm.getRawValue()).subscribe({
+      const credentials: LoginRequest = this.loginForm.getRawValue();
+
+      this.authService.login(credentials).subscribe({
+        next: (response) => {
+          if (!response.success) {
+            this.errorMessage.set(response.message || 'Login failed');
+            this.isLoading.set(false);
+          }
+        },
         error: (err) => {
           this.errorMessage.set('Invalid credentials. Please try again.');
           this.isLoading.set(false);

@@ -1,7 +1,7 @@
 <div class="container">
   @if (showToast()) {
     <div class="toast success">
-      ✅ Expense saved successfully!
+      ✅ {{ toastMessage() }}
     </div>
   }
 
@@ -55,7 +55,7 @@
         </div>
         <div class="expense-details">
           <div class="detail-row">
-            <span class="category-badge">{{ expense.category.name }}</span>
+            <span class="category-badge">{{ expense.categoryName }}</span>
             <span>{{ expense.date | date: 'MMM d, y' }}</span>
           </div>
         </div>

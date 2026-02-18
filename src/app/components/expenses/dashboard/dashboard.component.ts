@@ -52,11 +52,11 @@ export class DashboardComponent implements OnInit {
       this.targetUser()
     ).subscribe({
       next: (stats) => {
-        // Ensure we are creating a NEW object reference so the signal triggers
+        // stats is now properly typed as ApiResponse<CategorySum[]>
         this.chartData.set({
-          labels: stats.map(s => s.categoryName),
+          labels: stats.data.map((s) => s.categoryName),
           datasets: [{
-            data: stats.map(s => s.total),
+            data: stats.data.map((s) => s.total),
             backgroundColor: ['#38bdf8', '#818cf8', '#fb7185', '#34d399', '#fbbf24'],
             hoverBackgroundColor: ['#0ea5e9', '#6366f1', '#f43f5e', '#10b981', '#f59e0b']
           }]
