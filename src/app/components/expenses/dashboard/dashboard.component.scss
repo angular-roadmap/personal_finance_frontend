@@ -12,12 +12,16 @@
 }
 
 .grid-layout {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr; // Chart on left, List on right
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   gap: 2rem;
+  max-width: 800px;
+  margin: 20px auto;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 

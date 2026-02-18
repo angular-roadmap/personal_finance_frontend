@@ -1,20 +1,69 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.card {
+  margin-bottom: 2rem;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    margin: 0 0 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+}
+
 .category-form {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
   gap: 1rem;
   align-items: flex-end;
-  margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--border);
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
+
+  .btn-submit {
+    height: 46px;
+    min-width: 160px;
+  }
+}
+
+.category-list-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0 1rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-main);
+  }
+
+  .count-badge {
+    background: var(--border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
 }
 
 .category-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
 }
 
@@ -26,10 +75,11 @@
   padding: 1rem;
   border-radius: 12px;
   border: 1px solid var(--border);
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.2s;
 
   &:hover {
     border-color: var(--accent);
+    transform: translateY(-2px);
   }
 
   .dot {
@@ -42,11 +92,14 @@
   }
 
   .info {
+    flex: 1;
+    
     strong {
       display: block;
       color: var(--text-main);
       font-size: 1rem;
     }
+    
     p {
       margin: 0.2rem 0 0;
       font-size: 0.85rem;
@@ -58,6 +111,19 @@
 .empty-state {
   text-align: center;
   color: var(--text-muted);
-  padding: 2rem;
+  padding: 3rem 2rem;
   font-style: italic;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+
+  p {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    font-style: normal;
+  }
+
+  small {
+    font-size: 0.85rem;
+  }
 }
