@@ -1,0 +1,228 @@
+.expense-list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    color: var(--text-main);
+  }
+
+  .subtitle {
+    margin: 0.25rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .stats {
+    display: flex;
+    gap: 1.5rem;
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+
+      strong {
+        font-size: 1.5rem;
+        color: var(--accent);
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+.spinner-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 0;
+
+  .spinner {
+    color: var(--accent);
+    font-size: 1.1rem;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin: 0 -1.5rem;
+  padding: 0 1.5rem;
+}
+
+.expense-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  thead {
+    tr {
+      th {
+        background: var(--bg-dark);
+        color: var(--text-muted);
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 2px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+
+        &.align-right {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background-color 0.2s;
+
+      &:hover {
+        background: rgba(56, 189, 248, 0.05);
+      }
+
+      td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-main);
+
+        &.align-right {
+          text-align: right;
+        }
+
+        &.empty-state {
+          text-align: center;
+          padding: 3rem;
+        }
+
+        .date {
+          color: var(--text-muted);
+          font-size: 0.9rem;
+        }
+
+        .category-badge {
+          display: inline-block;
+          background: rgba(56, 189, 248, 0.15);
+          color: var(--accent);
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .user-badge {
+          display: inline-block;
+          background: rgba(251, 191, 36, 0.15);
+          color: #fbbf24;
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .amount {
+          color: var(--text-main);
+          font-size: 1.05rem;
+        }
+      }
+    }
+  }
+}
+
+.empty-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  p {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 1.1rem;
+  }
+
+  small {
+    color: var(--text-muted);
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+
+  .page-info {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .btn-page {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+
+    &:hover:not(:disabled) {
+      background: var(--accent);
+      color: var(--bg-dark);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .expense-table {
+    font-size: 0.9rem;
+
+    thead th,
+    tbody td {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+}

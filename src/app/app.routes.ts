@@ -4,6 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { CategoryManagerComponent } from './components/category-manager/category-manager.component';
 import { ExpenseFormComponent } from './components/expenses/expense-form/expense-form.component';
+import { ExpenseListComponent } from './components/expenses/list/expense-list.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'expenses-list',
+    component: ExpenseListComponent,
+    canActivate: [authGuard]
+  },
+  {
     path: 'categories',
     component: CategoryManagerComponent,
     canActivate: [authGuard]
@@ -29,9 +35,9 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'
-  }, // Home redirects to dashboard
+  },
   {
     path: '**',
     redirectTo: 'dashboard'
-  } // Wildcard path
+  }
 ];
