@@ -4,7 +4,9 @@
     <p>Please enter your details to view your finances.</p>
 
     @if (errorMessage()) {
-      <div class="error-banner">{{ errorMessage() }}</div>
+      <div class="error-banner" [class.warning]="errorMessage()?.includes('session')">
+        {{ errorMessage() }}
+      </div>
     }
 
     <div class="form-group">

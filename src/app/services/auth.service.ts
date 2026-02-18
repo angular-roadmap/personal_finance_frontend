@@ -1,4 +1,4 @@
-import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
@@ -17,39 +17,116 @@ export class AuthService {
   private readonly API_URL = 'http://localhost:8080/api/auth';
   private platformId = inject(PLATFORM_ID);
 
-  // Initialize signals safely
-  isAuthenticated = signal<boolean>(
-    isPlatformBrowser(this.platformId) ? !!localStorage.getItem('token') : false
-  );
+  sessionExpiredMessage = signal<string | null>(null);
+  isAuthenticated = signal<boolean>(false);
+  private tokenInitialized = false;
 
-  isAdmin = computed(() => {
+  constructor() {
+    this.initializeAuth();
+  }
+
+  private initializeAuth() {
+    if (isPlatformBrowser(this.platformId) && !this.tokenInitialized) {
+      this.tokenInitialized = true;
+      const token = localStorage.getItem('token');
+      console.log('[AuthService] Initializing auth, token exists:', !!token);
+      
+      if (token) {
+        const isValid = this.validateToken(token);
+        console.log('[AuthService] Token is valid:', isValid);
+        this.isAuthenticated.set(isValid);
+      }
+    }
+  }
+
+  private validateToken(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('[AuthService] Token payload:', payload);
+      
+      // If no expiration field, treat as valid (backend will validate)
+      if (!payload.exp) {
+        console.log('[AuthService] No exp field - treating as valid');
+        return true;
+      }
+      
+      const expirationTime = payload.exp * 1000;
+      const currentTime = Date.now();
+
+      if (currentTime >= expirationTime) {
+        console.warn('[AuthService] Token expired!');
+        this.handleExpiredToken();
+        return false;
+      }
+      
+      return true;
+    } catch (e) {
+      console.error('[AuthService] Token validation error:', e);
+      return false;
+    }
+  }
+
+  private handleExpiredToken() {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      this.sessionExpiredMessage.set('Your session has expired. Please log in again.');
+    }
+  }
+
+  isTokenValid(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      console.log('[AuthService] isTokenValid - not in browser');
+      return false;
+    }
+
+    // Make sure auth is initialized
+    this.initializeAuth();
+    
+    const token = localStorage.getItem('token');
+    console.log('[AuthService] isTokenValid called, token exists:', !!token);
+    console.log('[AuthService] isAuthenticated signal value:', this.isAuthenticated());
+    
+    if (!token) {
+      this.isAuthenticated.set(false);
+      return false;
+    }
+
+    return this.validateToken(token);
+  }
+
+  isAdmin(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
+    
     const token = localStorage.getItem('token');
     if (!token) return false;
 
     try {
-      // Decode the middle part of the JWT (the payload)
       const payload = JSON.parse(atob(token.split('.')[1]));
-      // This matches the "claim" name we used in Spring Boot
       return payload.role === 'ROLE_ADMIN';
     } catch (e) {
       return false;
     }
-  });
+  }
 
   login(credentials: { username: string; password: string }) {
     return this.http.post<JwtResponse>(`${this.API_URL}/login`, credentials)
       .pipe(
         tap(res => {
-          localStorage.setItem('token', res.token);
-          this.isAuthenticated.set(true);
-          this.router.navigate(['/dashboard']);
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('token', res.token);
+            this.isAuthenticated.set(true);
+            this.router.navigate(['/dashboard']);
+          }
         })
       );
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this.isAuthenticated.set(false);
-    this.router.navigate(['/login']);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      this.isAuthenticated.set(false);
+      this.sessionExpiredMessage.set(null);
+      this.router.navigate(['/login']);
+    }
   }
 }

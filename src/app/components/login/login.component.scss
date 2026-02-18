@@ -49,4 +49,10 @@ button {
   margin-bottom: 1.5rem;
   font-size: 0.85rem;
   border: 1px solid #ef4444;
+
+  &.warning {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+    border: 1px solid #fbbf24;
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
@@ -9,11 +9,10 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
 
-  // Signals for UI state
   errorMessage = signal<string | null>(null);
   isLoading = signal(false);
 
@@ -21,6 +20,16 @@ export class LoginComponent {
     username: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
+
+  ngOnInit() {
+    if (this.authService.sessionExpiredMessage()) {
+      this.errorMessage.set(this.authService.sessionExpiredMessage());
+      setTimeout(() => {
+        this.errorMessage.set(null);
+        this.authService.sessionExpiredMessage.set(null);
+      }, 5000);
+    }
+  }
 
   onSubmit() {
     if (this.loginForm.valid) {
